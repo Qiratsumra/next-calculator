@@ -74,11 +74,11 @@ const clearResult = () : void =>
                     <div className="grid grid-cols-2 gap-10">
                         <div className="flex flex-col space-y-4 ">
                             <Label htmlFor="num1" className="text-xl text-center font-bold font-sans max-sm:text-[17px]">Number No.1</Label>
-                            <Input value={num1} id="num1" type="num1" onChange={handlerNum1} placeholder="Enter a number" className="max-sm:text-[10px] max-sm:font-bold "></Input>
+                            <Input value={num1} id="num1" type="num1" onChange={handlerNum1} className="max-sm:text-xl max-sm:font-bold "></Input>
                         </div>
                         <div className="flex flex-col space-y-4">
                             <Label htmlFor="num1" className="text-xl text-center font-bold font-sans max-sm:text-[17px]">Number No.2</Label>
-                            <Input value={num2} id="num2" type="num2" onChange={handlerNum2} placeholder="Enter a number"  className="max-sm:text-[10px] max-sm:font-bold"></Input>
+                            <Input value={num2} id="num2" type="num2" onChange={handlerNum2}  className="max-sm:text-xs max-sm:font-bold"></Input>
                         </div>
                     </div>
                     {/* Buttons for arithmetic operations */}
