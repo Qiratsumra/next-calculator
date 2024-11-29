@@ -78,7 +78,7 @@ const clearResult = () : void =>
                         </div>
                         <div className="flex flex-col space-y-4">
                             <Label htmlFor="num1" className="text-xl text-center font-bold font-sans max-sm:text-[17px]">Number No.2</Label>
-                            <Input value={num2} id="num2" type="num2" onChange={handlerNum2}  className="max-sm:text-xs max-sm:font-bold"></Input>
+                            <Input value={num2} id="num2" type="num2" onChange={handlerNum2}  className="max-sm:text-xl max-sm:font-bold"></Input>
                         </div>
                     </div>
                     {/* Buttons for arithmetic operations */}
