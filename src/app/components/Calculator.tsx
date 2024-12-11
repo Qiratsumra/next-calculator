@@ -2,104 +2,77 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 export default function Calculator() {
-  // Step no.1
-  // for num1
-  const [num1, setNum1] = useState<string>("");
-  // for num2
-  const [num2, setNum2] = useState<string>("");
-  // for result
-  const [result, setResult] = useState<string>("");
+  // State for the current input
+  const [input, setInput] = useState<string>("");
 
-//   Step no.2
-// Handler for set and update the num1 value 
+  // Handle number and operator clicks
+  const handleButtonClick = (value: string) => {
+    // Prevent consecutive operators
+    if (/[-+*/.]$/.test(input) && /[-+*/.]/.test(value)) return;
+    setInput((prev) => prev + value);
+  };
 
-const handlerNum1 =(e:ChangeEvent<HTMLInputElement>)=>{
-    setNum1(e.target.value)
-}
-
-// Handler for set and update the num2 value 
-const handlerNum2 = (e:ChangeEvent<HTMLInputElement>)=>{
-    setNum2(e.target.value)
-}
-
-// function to perform addition and set the result
-const add = () : void => {
-    setResult((parseFloat(num1) + parseFloat(num2)).toString())
-}
-
-// function to perform subtraction and set the result
-const sub = () : void => {
-    setResult((parseFloat(num1)- parseFloat(num2)).toString());
-}
-
-// function to perform multiplication and set the result
-const multiple  = () :void => {
-    setResult((parseFloat(num1) * parseFloat(num2)).toString())
-}
-
-// function to perform division and set the result
-const division = () :void =>{
-
-    if (parseFloat(num2) !== 0) {
-        setResult((parseFloat(num1) / parseFloat(num2)).toString())
-    }else{
-        setResult("Error: Division by zero")
+  // Calculate the result
+  const calculateResult = () => {
+    try {
+      // Use eval safely by replacing any unsupported characters
+      const sanitizedInput = input.replace(/[^0-9+\-*/.]/g, "");
+      const result = eval(sanitizedInput);
+      setInput(result.toString());
+    } catch (error) {
+      setInput("Error");
     }
-} 
+  };
 
-// Function to clear input and result
-const clearResult = () : void =>
-    {
-        setNum1('')
-        setNum2('')
-        setResult('')
-    }
+  // Clear all input
+  const clearInput = () => {
+    setInput("");
+  };
 
+  // Remove the last character
+  const backspace = () => {
+    setInput('');
+  };
 
   return (
-    <div >
-        <div className="flex justify-center max-sm:mx-5 max-sm:p-0">
-            <Card className="bg-gradient-to-r from-[#ffbbaa] to-[#FEB47B] rounded-3xl bounce-in-top w-full max-w-md p-6 shadow-xl m-10 text-slate-900 mt-40">
-                <CardHeader>
-                    <CardTitle className="text-center text-5xl m-5 ">
-                        Calculator
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                     {/* Input fields for numbers */}
-                    <div className="grid grid-cols-2 gap-10">
-                        <div className="flex flex-col space-y-4 ">
-                            <Label htmlFor="num1" className="text-xl text-center font-bold font-sans max-sm:text-[17px]">Number No.1</Label>
-                            <Input value={num1} id="num1" type="num1" onChange={handlerNum1} className="max-sm:text-xl max-sm:font-bold "></Input>
-                        </div>
-                        <div className="flex flex-col space-y-4">
-                            <Label htmlFor="num1" className="text-xl text-center font-bold font-sans max-sm:text-[17px]">Number No.2</Label>
-                            <Input value={num2} id="num2" type="num2" onChange={handlerNum2}  className="max-sm:text-xl max-sm:font-bold"></Input>
-                        </div>
-                    </div>
-                    {/* Buttons for arithmetic operations */}
-                    <div className="grid grid-cols-4 gap-10 m-5">
-                        <Button variant={"outline"} className="text-2xl font-bold text-gray-700 dark:text-gray-300" onClick={add} >+</Button>
-                        <Button variant={"outline"} className="text-2xl font-bold text-gray-700 dark:text-gray-300" onClick={sub} >-</Button>
-                        <Button variant={"outline"} className="text-2xl font-bold text-gray-700 dark:text-gray-300" onClick={multiple} >*</Button>
-                        <Button variant={"outline"} className="text-2xl font-bold text-gray-700 dark:text-gray-300" onClick={division} >/</Button>
-                    </div>
+    <div>
+    <div className="flex justify-center max-sm:mx-5 max-sm:p-0 max-sm:m-4 sm:m-10">
+      <Card className="bg-black rounded-3xl max-w-md p-6 shadow-xl m-10 text-slate-900 mt-20">
+        <CardHeader>
+          <CardTitle className="text-center text-5xl m-5 text-white"> Calculator</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {/* Display the current input */}
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="input" className="text-xl text-center font-bold text-white">Input</Label>
+            <div className="bg-yellow-400 p-4 rounded-lg text-center font-bold text-xl">{input || '0'}</div>
+          </div>
 
-                     {/* Display the result */}
-                     <div className="flex flex-col space-y-2">
-                        <Label htmlFor="result" className="text-xl text-center font-bold font-sans">Result</Label>
-                        <Input value={result} id="result" type="text" placeholder="Result" className="m-4" readOnly>
-                        </Input>
-                     </div>
-                      {/* Clear button to reset inputs and result */}
-                      <Button variant="outline" className="w-full m-4" onClick={clearResult} >Clear</Button>
-                </CardContent>
-            </Card>
-        </div>
+          {/* Number buttons */}
+          <div className="grid grid-cols-4 gap-4 m-5">
+            {["7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", ".", "=", "+"].map((btn) => (
+              <Button 
+                key={btn} 
+                variant="outline" 
+                className="text-2xl font-bold border-white bg-black text-white" 
+                onClick={() => btn === "=" ? calculateResult() : handleButtonClick(btn)}
+              >
+                {btn}
+              </Button>
+            ))}
+          </div>
+
+          {/* Additional control buttons */}
+          <div className="grid grid-cols-2 gap-4">
+            <Button variant="outline" className="w-full" onClick={clearInput}>Clear</Button>
+            <Button variant="outline" className="w-full" onClick={backspace}>Backspace</Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
-  )
+    </div>
+  );
 }
